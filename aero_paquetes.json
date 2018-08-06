@@ -2,7 +2,7 @@
 "openapi": "3.0.0",
 "externalDocs": {
 "description": "Encuentre mas información aquí",
-"url": "https://git.aero.tur.ar/jsivori/aero-packs/wikis/swaggerdocs"
+"url": "https://github.com/aerolaplata/paquetes/tree/master"
 },
 "info": {
 "title": "Aero Paquetes",
