@@ -6,6 +6,9 @@
 },
 "info": {
 "title": "Aero Paquetes",
+"x-logo": {
+  "url": "https://sitio.aero.tur.ar/assets/logo-positive-ac9a94f014542271c698fdd81c08a30f0ae53f50c7eedfe418680a82b797b975.svg"
+},
 "description": "Aero-Packs es la aplicacion donde Aero S.R.L ofrece todos sus servicios en un único servicio integral.\n\nEste documento debe utilizarse como referencia para utilizar la API de AeroPacks. El mismo, esta en version beta. Pueden haber modificaciones o nueva información puede ser añadida.\n\nSe necesitan credenciales de acceso para el uso de esta API.\n",
 "version": "1.0",
 "contact": {
