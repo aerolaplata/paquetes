@@ -1,55 +1,459 @@
 {
   "openapi" : "3.0.0",
-  "externalDocs" : {
-    "description" : "Encuentre mas información aquí",
-    "url" : "https://git.aero.tur.ar/jsivori/aero-packs/wikis/swaggerdocs"
-  },
   "info" : {
     "title" : "Aero Paquetes",
     "description" : "Aero-Packs es la aplicacion donde Aero S.R.L ofrece todos sus servicios en un único servicio integral.\n\nEste documento debe utilizarse como referencia para utilizar la API de AeroPacks. El mismo, esta en version beta. Pueden haber modificaciones o nueva información puede ser añadida.\n\nSe necesitan credenciales de acceso para el uso de esta API.\n",
-    "version" : "1.0",
     "contact" : {
       "email" : "jonatan.sivori@aerolaplata.com.ar"
     },
     "license" : {
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0"
+  },
+  "externalDocs" : {
+    "description" : "Encuentre mas información aquí",
+    "url" : "https://git.aero.tur.ar/jsivori/aero-packs/wikis/swaggerdocs"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/jsivori/Aero-Packs/1.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "paths" : {
+    "/api/packages" : {
+      "get" : {
+        "tags" : [ "Index" ],
+        "summary" : "Listado general.",
+        "description" : "Obtiene un listado de salidas disponibles y visibles con fecha mayor o igual al día actual.\n",
+        "operationId" : "index",
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar con la salida.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/:id" : {
+      "get" : {
+        "tags" : [ "Find" ],
+        "summary" : "Búqueda puntual de una salida por identificador único.",
+        "description" : "Obtiene la información de una salida puntual, obviando si esta disponible o pasada de la fecha actual.\n",
+        "operationId" : "searchPackage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identificador unívoco del elemento que se busca.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar con la salida.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/find_with_params" : {
+      "post" : {
+        "tags" : [ "Find with parameters" ],
+        "summary" : "Búqueda de salidas con parámetros puntuales opcionales.",
+        "description" : "Obtiene la información de las salidas que se corresponden con los parámetros enviados, algunos de estos son opcionales y otros no.\n",
+        "operationId" : "find_with_parameters",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FindWithParamsData"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar con la salida.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/:id/availability" : {
+      "get" : {
+        "tags" : [ "Availability" ],
+        "summary" : "Consulta de disponibilidad de una salida.",
+        "description" : "Este endpoint además de consultar por la disponibilidad de una salida, actualiza las disponibilidades de cada elemento que la compone y por tanto la disponibilidad y precios de la salida en sí misma.\n",
+        "operationId" : "availability",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identificador unívoco del elemento que se busca.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar para disponibilidad.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar para recurso no encontrado.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/:id/other_bases" : {
+      "get" : {
+        "tags" : [ "Other Bases" ],
+        "summary" : "Alternativas a una salida puntual.",
+        "description" : "Basándose en una salida puntual por medio de su identificador único, este endpoint nos devuelve otra salidas que esten relacionadas a la misma de acuerdo a la base en la que la salida esta creada, entiéndase por SGL, DBL, TPL, etc.\n",
+        "operationId" : "other_bases",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identificador unívoco del elemento que se busca.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar con las salidas relacionadas a una salida puntual.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar para recurso no encontrado.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/:id/other_options" : {
+      "get" : {
+        "tags" : [ "Other options" ],
+        "summary" : "Alternativas a una salida puntual.",
+        "description" : "Basándose en una salida puntual por medio de su identificador único, este endpoint nos devuelve otra salidas que esten relacionadas a la misma de acuerdo a los destinos o lugares y cupos aéreos de la salida identificada.\n",
+        "operationId" : "other_options",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identificador unívoco del elemento que se busca.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar con las salidas relacionadas a una salida puntual.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar para recurso no encontrado.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/:id/reserve" : {
+      "post" : {
+        "tags" : [ "Reserve" ],
+        "summary" : "Genera una reserva.",
+        "description" : "Este endpoint crea la reserva con los servicios en el sistema backend. \n\nRequiere un par de parametros, el id de la salida puntual que pertenece al paquete y los parametros para el booking de la reserva.\n",
+        "operationId" : "reserve",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identificador unívoco del elemento que se busca.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 1
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar para acciones de la reserva.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_4"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar para una reserva no encontrada.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/reserve_to_cancel" : {
+      "get" : {
+        "tags" : [ "Cancel reserve" ],
+        "summary" : "Cancelar una reserva.",
+        "description" : "Este endpoint envía un mail al vendedor u operativo asociado a la reserva para solicitar la cancelación de la misma asociada a un paquete. El id_reserve debe corresponderse con el ID de reserva del MO.\n\nEs en este punto donde se puede automatizar el sistema enviando la cancelación de cupos al sistema de cupos.\n",
+        "operationId" : "other_options",
+        "parameters" : [ {
+          "name" : "reserve_id",
+          "in" : "path",
+          "description" : "Identificador unívoco de una reserva.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 35048
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar para acciones de la reserva.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar para una reserva no encontrada.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages/:id/get_price_info" : {
+      "get" : {
+        "tags" : [ "Get Price Info" ],
+        "summary" : "Preliquidacion de la salida puntual.",
+        "description" : "Obtiene los valores puntuales de una salida con un formato solicitado detallado.\n",
+        "operationId" : "getPriceInfo",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identificador unívoco del elemento que se busca.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Respuesta estándar con la salida.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Respuesta de error estandar.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components" : {
     "schemas" : {
       "Date" : {
-        "type" : "string",
         "pattern" : "^[0-9]{4}\\-((0[1-9]|1[0-2])){1}-([012][0-9]|3[01])$",
+        "type" : "string",
         "example" : "2017-10-12"
       },
       "Time" : {
-        "type" : "string",
         "pattern" : "(?:[01][0-9]|2[0-3])[0-5][0-9]",
+        "type" : "string",
         "example" : "2031"
       },
       "Base" : {
         "type" : "string",
         "description" : "Enumerativo string que representa la base de la salida.",
-        "enum" : [ "SGL", "DBL", "TPL" ],
-        "example" : "DBL"
+        "example" : "DBL",
+        "enum" : [ "SGL", "DBL", "TPL" ]
       },
       "CategoryItem" : {
-        "description" : "Categorización a la que pertenece una salida.",
-        "type" : "object",
         "required" : [ "name" ],
+        "type" : "object",
         "properties" : {
           "name" : {
             "type" : "string",
             "description" : "Nombre de la categoría.",
             "example" : "Sol y Playa"
           }
-        }
+        },
+        "description" : "Categorización a la que pertenece una salida."
       },
       "ServiceItem" : {
-        "description" : "Representa a un servicio de Productos Terrestres que forman parte de la salida.",
-        "type" : "object",
         "required" : [ "detail", "service_kind" ],
+        "type" : "object",
+        "properties" : {
+          "detail" : {
+            "type" : "string",
+            "description" : "Nombre del servicio",
+            "example" : "Excursión FD - Día completo  Regular - Chichén Itzá"
+          },
+          "service_kind" : {
+            "type" : "string",
+            "description" : "Tipo del servicio.",
+            "default" : "excursion",
+            "enum" : [ "admission", "excursion", "generic", "internal aereal", "transfer", "travel_assistance", "visa" ]
+          }
+        },
+        "description" : "Representa a un servicio de Productos Terrestres que forman parte de la salida."
+      },
+      "TransferItem" : {
+        "required" : [ "category", "detail", "from", "service_kind", "to", "type" ],
+        "type" : "object",
         "properties" : {
           "detail" : {
             "type" : "string",
@@ -59,21 +463,37 @@
           "service_kind" : {
             "type" : "string",
             "description" : "Tipo del servicio.",
-            "enum" : [ "admission", "excursion", "generic", "internal aereal", "transfer", "travel_assistance", "visa" ],
-            "example" : "transfer"
+            "example" : "transfer",
+            "enum" : [ "admission", "excursion", "generic", "internal aereal", "transfer", "travel_assistance", "visa" ]
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "in_out"
+          },
+          "category" : {
+            "type" : "string",
+            "example" : "regular"
+          },
+          "from" : {
+            "type" : "string",
+            "example" : "Aeropuerto Cancún"
+          },
+          "to" : {
+            "type" : "string",
+            "example" : "Hotel Cancún"
           }
-        }
+        },
+        "description" : "Representa a un traslado de Productos Terrestres que forman parte de la salida."
       },
       "IATACode" : {
-        "description" : "Codigo de 3 letras que representa univocamente un lugar o aeropuerto.",
-        "type" : "string",
         "pattern" : "^[A-Z]{3}$",
+        "type" : "string",
+        "description" : "Codigo de 3 letras que representa univocamente un lugar o aeropuerto.",
         "example" : "CUN"
       },
       "DepartureItem" : {
-        "description" : "Representa una ruta de los cupos aéreos que forman parte de la salida.",
+        "required" : [ "arrival_airport", "arrival_time", "date", "date_arrival", "departure_airport", "departure_time", "direction", "flight_number" ],
         "type" : "object",
-        "required" : [ "flight_number", "date", "departure_airport", "arrival_airport", "departure_time", "arrival_time", "date_arrival", "direction" ],
         "properties" : {
           "flight_number" : {
             "type" : "string",
@@ -99,16 +519,17 @@
             "$ref" : "#/components/schemas/Date"
           },
           "direction" : {
-            "description" : "Indicador del numero de escala dentro del vuelo general.",
             "type" : "integer",
+            "description" : "Indicador del numero de escala dentro del vuelo general.",
+            "format" : "int32",
             "example" : 1
           }
-        }
+        },
+        "description" : "Representa una ruta de los cupos aéreos que forman parte de la salida."
       },
       "AccomodationItem" : {
+        "required" : [ "category_name", "check_in", "check_out", "city_iata", "name", "nights", "regime", "room_type", "service_kind", "stars" ],
         "type" : "object",
-        "description" : "Representa datos de la habitacion de hotel de la salida.",
-        "required" : [ "name", "category_name", "service_kind", "room_type", "stars", "regime", "check_in", "check_out", "nights", "city_iata" ],
         "properties" : {
           "name" : {
             "type" : "string",
@@ -128,20 +549,21 @@
           "room_type" : {
             "type" : "string",
             "description" : "Tipo de habitacion de acuerdo a la base de personas.",
-            "enum" : [ "single", "double", "triple", "quadruple", "apartment" ],
-            "example" : "double"
+            "example" : "double",
+            "enum" : [ "single", "double", "triple", "quadruple", "apartment" ]
           },
           "stars" : {
             "type" : "integer",
             "description" : "Cantidad de estrellas del hotel.",
-            "enum" : [ 1, 2, 3, 4, 5 ],
-            "example" : 4
+            "format" : "int32",
+            "example" : 4,
+            "enum" : [ 1, 2, 3, 4, 5 ]
           },
           "regime" : {
-            "description" : "Regimen de la tarifa del hotel.",
             "type" : "string",
-            "enum" : [ "Sólo alojamiento", "Sólo desayuno", "Media pensión", "Pensión completa", "Todo incluido" ],
-            "example" : "Todo incluido"
+            "description" : "Regimen de la tarifa del hotel.",
+            "example" : "Todo incluido",
+            "enum" : [ "Sólo alojamiento", "Sólo desayuno", "Media pensión", "Pensión completa", "Todo incluido" ]
           },
           "check_in" : {
             "$ref" : "#/components/schemas/Date"
@@ -152,17 +574,18 @@
           "nights" : {
             "type" : "integer",
             "description" : "Cantidad de noches que se contrata la habitación.",
+            "format" : "int32",
             "example" : 8
           },
           "city_iata" : {
             "$ref" : "#/components/schemas/IATACode"
           }
-        }
+        },
+        "description" : "Representa datos de la habitacion de hotel de la salida."
       },
       "PlaceItem" : {
+        "required" : [ "country", "iata_code", "name" ],
         "type" : "object",
-        "description" : "Lugar asociado a la salida.",
-        "required" : [ "name", "country", "iata_code" ],
         "properties" : {
           "name" : {
             "type" : "string",
@@ -177,24 +600,24 @@
           "iata_code" : {
             "$ref" : "#/components/schemas/IATACode"
           }
-        }
+        },
+        "description" : "Lugar asociado a la salida."
       },
       "ImageItem" : {
-        "type" : "object",
-        "description" : "Representa una imagen de la salida.",
         "required" : [ "url" ],
+        "type" : "object",
         "properties" : {
           "url" : {
             "type" : "string",
             "description" : "URL de donde se obtiene la imagen.",
             "example" : "https://aero-tur-dev.s3-sa-east-1.amazonaws.com/cotizador/galleries_packages/58/temp2100720181033.jpg?X-Amz-Expires=600&X-Amz-Date=20180720T152436Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJDOYXBY4JJXICGEA/20180720/sa-east-1/s3/aws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=ffac7c390ebfd4bcf46006fd1c8bdd3e7b3dbe6c908da41767b3e823609f5cab"
           }
-        }
+        },
+        "description" : "Representa una imagen de la salida."
       },
       "RateItem" : {
+        "required" : [ "ars_value", "eur_value", "gbp_value", "usd_value" ],
         "type" : "object",
-        "description" : "Precio de la salida en distintas monedas.",
-        "required" : [ "ars_value", "usd_value", "eur_value", "gbp_value" ],
         "properties" : {
           "ars_value" : {
             "type" : "number",
@@ -219,14 +642,16 @@
             "format" : "float",
             "example" : 2338.63
           }
-        }
+        },
+        "description" : "Precio de la salida en distintas monedas."
       },
       "SearchItem" : {
+        "required" : [ "accomodation", "available", "base", "base_related_packages", "categories", "departures", "description", "duration", "end_date", "id", "images", "name", "observations", "other_related_packages", "places", "prices", "prices_with_markup", "related_packages", "services", "start_date" ],
         "type" : "object",
-        "required" : [ "id", "name", "description", "available", "observations", "start_date", "end_date", "base", "categories", "services", "departures", "accomodation", "places", "images", "prices", "prices_with_markup", "related_packages", "base_related_packages", "other_related_packages" ],
         "properties" : {
           "id" : {
             "type" : "integer",
+            "format" : "int32",
             "example" : 1
           },
           "name" : {
@@ -238,8 +663,7 @@
             "example" : "Paquete Masivo N°1 - Cupo LA 19Jul18 8 nts - RIU Cancún - Doble Estándar Vista Mar (DBMB)."
           },
           "available" : {
-            "type" : "boolean",
-            "example" : true
+            "type" : "boolean"
           },
           "observations" : {
             "type" : "string",
@@ -260,10 +684,22 @@
               "$ref" : "#/components/schemas/CategoryItem"
             }
           },
+          "places" : {
+            "$ref" : "#/components/schemas/SearchItem_places"
+          },
+          "duration" : {
+            "type" : "number",
+            "format" : "integer",
+            "example" : 8
+          },
           "services" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/ServiceItem"
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/ServiceItem"
+              }, {
+                "$ref" : "#/components/schemas/TransferItem"
+              } ]
             }
           },
           "departures" : {
@@ -276,12 +712,6 @@
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/AccomodationItem"
-            }
-          },
-          "places" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PlaceItem"
             }
           },
           "images" : {
@@ -304,39 +734,42 @@
           },
           "related_packages" : {
             "type" : "array",
+            "example" : [ 2, 3, 4, 5, 6, 7, 8 ],
             "items" : {
-              "type" : "integer"
-            },
-            "example" : [ 2, 3, 4, 5, 6, 7, 8 ]
+              "type" : "integer",
+              "format" : "int32"
+            }
           },
           "base_related_packages" : {
             "type" : "array",
+            "example" : [ 2 ],
             "items" : {
-              "type" : "integer"
-            },
-            "example" : [ 2 ]
+              "type" : "integer",
+              "format" : "int32"
+            }
           },
           "other_related_packages" : {
             "type" : "array",
+            "example" : [ 3 ],
             "items" : {
-              "type" : "integer"
-            },
-            "example" : [ 3 ]
+              "type" : "integer",
+              "format" : "int32"
+            }
           }
         }
       },
       "SearchRelatedItem" : {
+        "required" : [ "accomodation", "can_sell", "id", "images", "prices", "prices_with_markup" ],
         "type" : "object",
-        "required" : [ "id", "can_sell", "accomodation", "images", "prices", "prices_with_markup" ],
         "properties" : {
           "id" : {
             "type" : "integer",
+            "format" : "int32",
             "example" : 1
           },
           "can_sell" : {
             "type" : "boolean",
-            "description" : "Booleano que determina si la salida puede venderse o no en base a la visibilidad y disponibilidad de la misma.",
-            "example" : true
+            "description" : "Booleano que determina si la salida puede venderse o no en base a la visibilidad y disponibilidad de la misma."
           },
           "accomodation" : {
             "type" : "array",
@@ -365,8 +798,8 @@
         }
       },
       "ReserveDataParam" : {
+        "required" : [ "agency_id", "seller_email" ],
         "type" : "object",
-        "required" : [ "seller_email", "agency_id" ],
         "properties" : {
           "seller_email" : {
             "type" : "string",
@@ -376,13 +809,14 @@
           "agency_id" : {
             "type" : "integer",
             "description" : "Identificador único de una agencia.",
+            "format" : "int32",
             "example" : 180
           }
         }
       },
       "PassengerDataParam" : {
+        "required" : [ "birthdate", "document_number", "document_type", "first_name", "last_name" ],
         "type" : "object",
-        "required" : [ "first_name", "last_name", "document_type", "document_number", "birthdate" ],
         "properties" : {
           "first_name" : {
             "type" : "string",
@@ -397,8 +831,8 @@
           "document_type" : {
             "type" : "string",
             "description" : "Tipo de documento del pasajero.",
-            "enum" : [ "DNI", "VISA", "PASAPORTE" ],
-            "example" : "DNI"
+            "example" : "DNI",
+            "enum" : [ "DNI", "VISA", "PASAPORTE" ]
           },
           "document_number" : {
             "type" : "string",
@@ -411,32 +845,30 @@
         }
       },
       "locationIds" : {
-        "description" : "Arreglo de identificadores únicos de destinos para la búsqueda. En mismo formato, acepta un único identificador.",
         "type" : "array",
+        "description" : "Arreglo de identificadores únicos de destinos para la búsqueda. En mismo formato, acepta un único identificador.",
+        "example" : [ "3453, 1234" ],
         "items" : {
-          "type" : "string",
-          "pattern" : "^(\\d{1,5})((,\\s*\\d{1,5})*)?"
-        },
-        "example" : [ "3453, 1234" ]
+          "pattern" : "^(\\d{1,5})((,\\s*\\d{1,5})*)?",
+          "type" : "string"
+        }
       },
       "locationNames" : {
-        "description" : "Arreglo de nombres de destinos para la búsqueda. En mismo formato, acepta un único identificador.",
         "type" : "array",
+        "description" : "Arreglo de nombres de destinos para la búsqueda. En mismo formato, acepta un único identificador.",
+        "example" : [ "Cancun", "Lima" ],
         "items" : {
           "type" : "string",
           "example" : "Cancun"
-        },
-        "example" : [ "Cancun", "Lima" ]
+        }
       },
       "visible" : {
         "type" : "string",
-        "description" : "Determina si las salidas a buscar tienen que estar o no visibles, la omisión de este paraámetro se toma como `true`.",
-        "example" : false
+        "description" : "Determina si las salidas a buscar tienen que estar o no visibles, la omisión de este paraámetro se toma como `true`."
       },
       "FindWithParamsData" : {
+        "required" : [ "adults_count", "end_date", "location_ids", "location_names", "start_date", "visible" ],
         "type" : "object",
-        "description" : "Informacion necesaria para la busqueda con parametros opcionales.",
-        "required" : [ "start_date", "end_date", "adults_count", "location_ids", "location_names", "visible" ],
         "properties" : {
           "start_date" : {
             "$ref" : "#/components/schemas/Date"
@@ -446,6 +878,7 @@
           },
           "adults_count" : {
             "type" : "integer",
+            "format" : "int32",
             "example" : 1
           },
           "location_ids" : {
@@ -457,15 +890,16 @@
           "visible" : {
             "$ref" : "#/components/schemas/visible"
           }
-        }
+        },
+        "description" : "Informacion necesaria para la busqueda con parametros opcionales."
       },
       "BookingDataParam" : {
+        "required" : [ "adults_number", "passengers", "reserve_data" ],
         "type" : "object",
-        "description" : "Informacion necesaria para el booking de una reserva.",
-        "required" : [ "adults_number", "reserve_data", "passengers" ],
         "properties" : {
           "adults_number" : {
             "type" : "integer",
+            "format" : "int32",
             "example" : 1
           },
           "reserve_data" : {
@@ -474,12 +908,12 @@
           "passengers" : {
             "$ref" : "#/components/schemas/PassengerDataParam"
           }
-        }
+        },
+        "description" : "Informacion necesaria para el booking de una reserva."
       },
       "RateDescriptionItem" : {
+        "required" : [ "amount", "base", "description", "rate" ],
         "type" : "object",
-        "description" : "Detalle de importe para endpoints de TravelPack.",
-        "required" : [ "rate", "amount", "base", "description" ],
         "properties" : {
           "rate" : {
             "type" : "number",
@@ -500,12 +934,12 @@
             "type" : "string",
             "example" : "Gastos administrativos"
           }
-        }
+        },
+        "description" : "Detalle de importe para endpoints de TravelPack."
       },
       "RateDescriptionMinItem" : {
-        "type" : "object",
-        "description" : "Detalle de importe para endpoints de TravelPack.",
         "required" : [ "amount", "description" ],
+        "type" : "object",
         "properties" : {
           "amount" : {
             "type" : "number",
@@ -516,16 +950,16 @@
             "type" : "string",
             "example" : "Gastos administrativos"
           }
-        }
+        },
+        "description" : "Detalle de importe para endpoints de TravelPack."
       },
       "PreliquidationItem" : {
+        "required" : [ "FiscalTaxes", "NonCommissionableService", "TourismTaxes", "commission_amount", "commissionable_price", "total" ],
         "type" : "object",
-        "required" : [ "total", "TourismTaxes", "FiscalTaxes", "NonCommissionableService", "commission_amount", "commissionable_price" ],
         "properties" : {
           "total" : {
             "type" : "integer",
-            "format" : "float",
-            "example" : 1101.48
+            "format" : "float"
           },
           "TourismTaxes" : {
             "$ref" : "#/components/schemas/RateDescriptionItem"
@@ -545,12 +979,295 @@
           "commission_amount" : {
             "type" : "integer",
             "format" : "float",
-            "example" : 0.0
+            "example" : 0
           },
           "commissionable_price" : {
             "type" : "integer",
             "format" : "float",
-            "example" : 857.0
+            "example" : 857
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "array",
+            "description" : "Colección de salidas.",
+            "items" : {
+              "$ref" : "#/components/schemas/SearchItem"
+            }
+          }
+        }
+      },
+      "inline_response_400" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "error"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Detalle del/los error/s.",
+            "example" : [ ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "array",
+            "description" : "Arreglo vacío.",
+            "items" : {
+              "type" : "object",
+              "example" : [ ]
+            }
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "$ref" : "#/components/schemas/SearchItem"
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "boolean",
+            "description" : "Respuesta booleana de disponibilidad de la salida."
+          }
+        }
+      },
+      "inline_response_400_1" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "error"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Detalle del/los error/s.",
+            "example" : [ "El paquete no existe" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "array",
+            "description" : "Arreglo vacío.",
+            "items" : {
+              "type" : "object",
+              "example" : [ ]
+            }
+          }
+        }
+      },
+      "inline_response_200_3" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "array",
+            "description" : "Colección de salidas.",
+            "items" : {
+              "$ref" : "#/components/schemas/SearchRelatedItem"
+            }
+          }
+        }
+      },
+      "body" : {
+        "required" : [ "booking_params" ],
+        "type" : "object",
+        "properties" : {
+          "booking_params" : {
+            "$ref" : "#/components/schemas/BookingDataParam"
+          }
+        }
+      },
+      "inline_response_200_4_info" : {
+        "type" : "object",
+        "properties" : {
+          "seller_email" : {
+            "type" : "string",
+            "description" : "Mail del vendedor",
+            "example" : "juliana.soto@aerolaplata.com.ar"
+          },
+          "reserve_id" : {
+            "type" : "integer",
+            "description" : "Identificador unívoco de una reserva.",
+            "format" : "int32",
+            "example" : 35048
+          }
+        }
+      },
+      "inline_response_200_4" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ "Se ha enviado el mail a juliana.soto@aerolaplata.com.ar" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "$ref" : "#/components/schemas/inline_response_200_4_info"
+          }
+        }
+      },
+      "inline_response_400_2" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "error"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Detalle del/los error/s.",
+            "example" : [ "La reserva no existe" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "array",
+            "description" : "Arreglo vacío.",
+            "items" : {
+              "type" : "object",
+              "example" : [ ]
+            }
+          }
+        }
+      },
+      "inline_response_200_5" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ "Se ha enviado el mail a juliana.soto@aerolaplata.com.ar" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "type" : "boolean",
+            "description" : "Respuesta booleana que referencia como terminó en el endpoint."
+          }
+        }
+      },
+      "inline_response_200_6" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "Estado del request",
+            "example" : "ok"
+          },
+          "notifications" : {
+            "type" : "array",
+            "description" : "Notificaciones.",
+            "example" : [ ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "info" : {
+            "$ref" : "#/components/schemas/PreliquidationItem"
+          }
+        }
+      },
+      "SearchItem_places" : {
+        "type" : "object",
+        "properties" : {
+          "origin" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaceItem"
+            }
+          },
+          "middle_destinations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaceItem"
+            }
+          },
+          "destination" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaceItem"
+            }
           }
         }
       }
@@ -561,30 +1278,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "error"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Detalle del/los error/s.",
-                  "example" : [ ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "array",
-                  "description" : "Arreglo vacío.",
-                  "items" : {
-                    "type" : "object",
-                    "example" : [ ]
-                  }
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_400"
             }
           }
         }
@@ -594,30 +1288,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "error"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Detalle del/los error/s.",
-                  "example" : [ "El paquete no existe" ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "array",
-                  "description" : "Arreglo vacío.",
-                  "items" : {
-                    "type" : "object",
-                    "example" : [ ]
-                  }
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_400_1"
             }
           }
         }
@@ -627,30 +1298,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "error"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Detalle del/los error/s.",
-                  "example" : [ "La reserva no existe" ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "array",
-                  "description" : "Arreglo vacío.",
-                  "items" : {
-                    "type" : "object",
-                    "example" : [ ]
-                  }
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_400_2"
             }
           }
         }
@@ -660,25 +1308,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "$ref" : "#/components/schemas/SearchItem"
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200_1"
             }
           }
         }
@@ -688,29 +1318,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "array",
-                  "description" : "Colección de salidas.",
-                  "items" : {
-                    "$ref" : "#/components/schemas/SearchItem"
-                  }
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200"
             }
           }
         }
@@ -720,27 +1328,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "boolean",
-                  "description" : "Respuesta booleana de disponibilidad de la salida.",
-                  "example" : true
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200_2"
             }
           }
         }
@@ -750,29 +1338,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "array",
-                  "description" : "Colección de salidas.",
-                  "items" : {
-                    "$ref" : "#/components/schemas/SearchRelatedItem"
-                  }
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200_3"
             }
           }
         }
@@ -782,27 +1348,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ "Se ha enviado el mail a juliana.soto@aerolaplata.com.ar" ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "boolean",
-                  "description" : "Respuesta booleana que referencia como terminó en el endpoint.",
-                  "example" : true
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200_5"
             }
           }
         }
@@ -812,37 +1358,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ "Se ha enviado el mail a juliana.soto@aerolaplata.com.ar" ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "type" : "object",
-                  "properties" : {
-                    "seller_email" : {
-                      "type" : "string",
-                      "description" : "Mail del vendedor",
-                      "example" : "juliana.soto@aerolaplata.com.ar"
-                    },
-                    "reserve_id" : {
-                      "type" : "integer",
-                      "description" : "Identificador unívoco de una reserva.",
-                      "example" : 35048
-                    }
-                  }
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200_4"
             }
           }
         }
@@ -852,25 +1368,7 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "type" : "string",
-                  "description" : "Estado del request",
-                  "example" : "ok"
-                },
-                "notifications" : {
-                  "type" : "array",
-                  "description" : "Notificaciones.",
-                  "example" : [ ],
-                  "items" : {
-                    "type" : "string"
-                  }
-                },
-                "info" : {
-                  "$ref" : "#/components/schemas/PreliquidationItem"
-                }
-              }
+              "$ref" : "#/components/schemas/inline_response_200_6"
             }
           }
         }
@@ -878,222 +1376,31 @@
     },
     "parameters" : {
       "requestIdParam" : {
-        "in" : "path",
         "name" : "id",
-        "required" : true,
-        "schema" : {
-          "type" : "integer"
-        },
+        "in" : "path",
         "description" : "Identificador unívoco del elemento que se busca.",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "example" : 1
       },
       "requestReserveIdParam" : {
-        "in" : "path",
         "name" : "reserve_id",
-        "required" : true,
-        "schema" : {
-          "type" : "integer"
-        },
+        "in" : "path",
         "description" : "Identificador unívoco de una reserva.",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "example" : 35048
       }
     }
-  },
-  "paths" : {
-    "/api/packages" : {
-      "get" : {
-        "tags" : [ "Index" ],
-        "summary" : "Listado general.",
-        "description" : "Obtiene un listado de salidas disponibles y visibles con fecha mayor o igual al día actual.\n",
-        "operationId" : "index",
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/StandardPackageItems"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardError"
-          }
-        }
-      }
-    },
-    "/api/packages/:id" : {
-      "get" : {
-        "tags" : [ "Find" ],
-        "summary" : "Búqueda puntual de una salida por identificador único.",
-        "description" : "Obtiene la información de una salida puntual, obviando si esta disponible o pasada de la fecha actual.\n",
-        "operationId" : "searchPackage",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestIdParam"
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/StandardPackageItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardError"
-          }
-        }
-      }
-    },
-    "/api/packages/find_with_params" : {
-      "post" : {
-        "tags" : [ "Find with parameters" ],
-        "summary" : "Búqueda de salidas con parámetros puntuales opcionales.",
-        "description" : "Obtiene la información de las salidas que se corresponden con los parámetros enviados, algunos de estos son opcionales y otros no.\n",
-        "operationId" : "find_with_parameters",
-        "requestBody" : {
-          "required" : true,
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/FindWithParamsData"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/StandardPackageItems"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardError"
-          }
-        }
-      }
-    },
-    "/api/packages/:id/availability" : {
-      "get" : {
-        "tags" : [ "Availability" ],
-        "summary" : "Consulta de disponibilidad de una salida.",
-        "description" : "Este endpoint además de consultar por la disponibilidad de una salida, actualiza las disponibilidades de cada elemento que la compone y por tanto la disponibilidad y precios de la salida en sí misma.\n",
-        "operationId" : "availability",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestIdParam"
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/StandardAvailableResponseItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardNotFoundError"
-          }
-        }
-      }
-    },
-    "/api/packages/:id/other_bases" : {
-      "get" : {
-        "tags" : [ "Other Bases" ],
-        "summary" : "Alternativas a una salida puntual.",
-        "description" : "Basándose en una salida puntual por medio de su identificador único, este endpoint nos devuelve otra salidas que esten relacionadas a la misma de acuerdo a la base en la que la salida esta creada, entiéndase por SGL, DBL, TPL, etc.\n",
-        "operationId" : "other_bases",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestIdParam"
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/StandardOtherResponseItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardNotFoundError"
-          }
-        }
-      }
-    },
-    "/api/packages/:id/other_options" : {
-      "get" : {
-        "tags" : [ "Other options" ],
-        "summary" : "Alternativas a una salida puntual.",
-        "description" : "Basándose en una salida puntual por medio de su identificador único, este endpoint nos devuelve otra salidas que esten relacionadas a la misma de acuerdo a los destinos o lugares y cupos aéreos de la salida identificada.\n",
-        "operationId" : "other_options",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestIdParam"
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/StandardOtherResponseItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardNotFoundError"
-          }
-        }
-      }
-    },
-    "/api/packages/:id/reserve" : {
-      "post" : {
-        "tags" : [ "Reserve" ],
-        "summary" : "Genera una reserva.",
-        "description" : "Este endpoint crea la reserva con los servicios en el sistema backend. \n\nRequiere un par de parametros, el id de la salida puntual que pertenece al paquete y los parametros para el booking de la reserva.\n",
-        "operationId" : "reserve",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestIdParam"
-        } ],
-        "requestBody" : {
-          "required" : true,
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "required" : [ "booking_params" ],
-                "properties" : {
-                  "booking_params" : {
-                    "$ref" : "#/components/schemas/BookingDataParam"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/ReserveResponseItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardNotFoundReserveError"
-          }
-        }
-      }
-    },
-    "/api/packages/reserve_to_cancel" : {
-      "get" : {
-        "tags" : [ "Cancel reserve" ],
-        "summary" : "Cancelar una reserva.",
-        "description" : "Este endpoint envía un mail al vendedor u operativo asociado a la reserva para solicitar la cancelación de la misma asociada a un paquete. El id_reserve debe corresponderse con el ID de reserva del MO.\n\nEs en este punto donde se puede automatizar el sistema enviando la cancelación de cupos al sistema de cupos.\n",
-        "operationId" : "other_options",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestReserveIdParam"
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/CancelReserveResponseItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardNotFoundReserveError"
-          }
-        }
-      }
-    },
-    "/api/packages/:id/get_price_info" : {
-      "get" : {
-        "tags" : [ "Get Price Info" ],
-        "summary" : "Preliquidacion de la salida puntual.",
-        "description" : "Obtiene los valores puntuales de una salida con un formato solicitado detallado.\n",
-        "operationId" : "getPriceInfo",
-        "parameters" : [ {
-          "$ref" : "#/components/parameters/requestIdParam"
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/PricePackageItem"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/StandardError"
-          }
-        }
-      }
-    }
-  },
-  "servers" : [ {
-    "description" : "SwaggerHub API Auto Mocking",
-    "url" : "https://virtserver.swaggerhub.com/jsivori/Aero-Packs/1.0"
-  } ]
+  }
 }
