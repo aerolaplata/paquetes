@@ -10,14 +10,14 @@
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version" : "1.0"
+    "version" : "1.1"
   },
   "externalDocs" : {
     "description" : "Encuentre mas información aquí",
     "url" : "https://git.aero.tur.ar/jsivori/aero-packs/wikis/swaggerdocs"
   },
   "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/jsivori/Aero-Packs/1.0",
+    "url" : "https://virtserver.swaggerhub.com/jsivori/Aero-Packs/1.1",
     "description" : "SwaggerHub API Auto Mocking"
   } ],
   "paths" : {
@@ -415,6 +415,12 @@
         "type" : "string",
         "example" : "2031"
       },
+      "Time2" : {
+        "pattern" : "(?:[01][0-9]|2[0-3]):([0-5][0-9])",
+        "type" : "string",
+        "description" : "String que representa la clase Time.",
+        "example" : "20:31"
+      },
       "Base" : {
         "type" : "string",
         "description" : "Enumerativo string que representa la base de la salida.",
@@ -491,38 +497,89 @@
         "description" : "Codigo de 3 letras que representa univocamente un lugar o aeropuerto.",
         "example" : "CUN"
       },
-      "DepartureItem" : {
-        "required" : [ "arrival_airport", "arrival_time", "date", "date_arrival", "departure_airport", "departure_time", "direction", "flight_number" ],
+      "Segment_Leg_Info" : {
+        "required" : [ "arrival_date", "arrival_time", "company", "departure_date", "departure_time", "destination", "flight_duration", "flight_number", "origin" ],
         "type" : "object",
         "properties" : {
-          "flight_number" : {
-            "type" : "string",
-            "description" : "Numero identificador del vuelo.",
-            "example" : "LA2411"
+          "origin" : {
+            "$ref" : "#/components/schemas/IATACode"
           },
-          "date" : {
+          "destination" : {
+            "$ref" : "#/components/schemas/IATACode"
+          },
+          "departure_date" : {
             "$ref" : "#/components/schemas/Date"
-          },
-          "departure_airport" : {
-            "$ref" : "#/components/schemas/IATACode"
-          },
-          "arrival_airport" : {
-            "$ref" : "#/components/schemas/IATACode"
           },
           "departure_time" : {
-            "$ref" : "#/components/schemas/Time"
+            "$ref" : "#/components/schemas/Time2"
           },
-          "arrival_time" : {
-            "$ref" : "#/components/schemas/Time"
-          },
-          "date_arrival" : {
+          "arrival_date" : {
             "$ref" : "#/components/schemas/Date"
           },
-          "direction" : {
+          "arrival_time" : {
+            "$ref" : "#/components/schemas/Time2"
+          },
+          "company" : {
+            "type" : "string",
+            "description" : "Compañia.",
+            "example" : "Aerolineas Argentinas"
+          },
+          "flight_number" : {
             "type" : "integer",
-            "description" : "Indicador del numero de escala dentro del vuelo general.",
+            "description" : "Numero del vuelo.",
             "format" : "int32",
+            "example" : 8010
+          },
+          "flight_duration" : {
+            "$ref" : "#/components/schemas/Time2"
+          }
+        }
+      },
+      "DepartureItem" : {
+        "required" : [ "arrival_date", "arrival_time", "baggage", "baggage_allowed", "departure_date", "departure_time", "destination", "fligh_duration", "legs", "origin", "time_between_legs" ],
+        "type" : "object",
+        "properties" : {
+          "origin" : {
+            "type" : "string",
+            "example" : "EZE"
+          },
+          "destination" : {
+            "type" : "string",
+            "example" : "CUN"
+          },
+          "departure_date" : {
+            "$ref" : "#/components/schemas/Date"
+          },
+          "arrival_date" : {
+            "$ref" : "#/components/schemas/Date"
+          },
+          "departure_time" : {
+            "$ref" : "#/components/schemas/Time2"
+          },
+          "arrival_time" : {
+            "$ref" : "#/components/schemas/Time2"
+          },
+          "fligh_duration" : {
+            "$ref" : "#/components/schemas/Time2"
+          },
+          "time_between_legs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Time2"
+            }
+          },
+          "legs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Segment_Leg_Info"
+            }
+          },
+          "baggage" : {
+            "type" : "number",
             "example" : 1
+          },
+          "baggage_allowed" : {
+            "type" : "boolean"
           }
         },
         "description" : "Representa una ruta de los cupos aéreos que forman parte de la salida."
